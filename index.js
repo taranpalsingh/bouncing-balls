@@ -1,12 +1,11 @@
-var time = 1000;
-
-var W = window.innerWidth;
-var H = window.innerHeight;
+let W = window.innerWidth;
+let H = window.innerHeight;
+let ball = []
 
 const N = 1;
-var gravity = 0.3;
-// var traction = 0.005;
-var bounce_factor = 1;
+let gravity = 0.3;
+// let traction = 0.005;
+let bounce_factor = 1;
 
 window.requestAnimationFrame = function(){   // To tell the browser about the animation.
   return window.requestAnimationFrame ||
@@ -19,21 +18,23 @@ window.requestAnimationFrame = function(){   // To tell the browser about the an
   }
 }();
 
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
+let canvas = document.querySelector('canvas');
+let ctx = canvas.getContext('2d');
 
 canvas.width = W;
 canvas.height = H;
 
-var ball = []
 
 function newBall(mousex, mousey){
   ball.push(new Ball(mousex, mousey));
   console.log(ball.length);
 }
 
-// newBall();
-// newBall();
+function windowResized(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
 
 for(let j=0; j<N; j++){
   newBall();
@@ -43,10 +44,12 @@ for(let j=0; j<N; j++){
 //   newBall();
 // }, 3000);
 
-// var ball2 = new Ball();
+// let ball2 = new Ball();
 
-var mousex = 0;
-var mousey = 0;
+let mousex = 0;
+let mousey = 0;
+
+addEventListener("resize", windowResized);
 
 addEventListener("click", function(){
   console.log("inside");
@@ -54,11 +57,6 @@ addEventListener("click", function(){
   mousey = event.clientY;
   newBall(mousex, mousey);
 })
-
-// function createObstacle(){
-//   var obstacle = new Obstacle();
-//   return obstacle;
-// }
 
 $(document).ready( function renderFrame() {
 
@@ -87,6 +85,7 @@ $(document).ready( function renderFrame() {
       ball[i].vy *= -bounce_factor;
     }
     else if(ball[i].y - ball[i].radius < 0){
+      ball[i].y = ball[i].radius;
       ball[i].vy *= -bounce_factor;
     }
 
@@ -105,9 +104,9 @@ $(document).ready( function renderFrame() {
 }());
 
 function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
+  let letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
@@ -123,7 +122,7 @@ function Ball(mousex, mousey) {
   // console.log("(x,y) : ", this.x, this.y);
 
   this.newRadius = this.radius;
-  var randomVal = Math.random();
+  let randomVal = Math.random();
 
   this.vx = (randomVal * 10);  // To ensure a value between 6 and 15.
   if( randomVal % 2 > 0.5)  // remainder is in the range [0,1]
